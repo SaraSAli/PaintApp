@@ -1,10 +1,13 @@
 package com.Project.shapes;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Ellipse implements Shape {
+
+    private Ellipse2D ellipse2D;
 
     protected Point point;
     protected Map<String, Double> prop;
@@ -17,8 +20,8 @@ public class Ellipse implements Shape {
         prop.put("Length", 0.0);
         prop.put("midX", 0.0);
         prop.put("midY", 0.0);
-        prop.put("x",0.0);
-        prop.put("y",0.0);
+        prop.put("x", 0.0);
+        prop.put("y", 0.0);
     }
 
     @Override
@@ -63,33 +66,34 @@ public class Ellipse implements Shape {
 
     @Override
     public void draw(Object canvas) {
-        double tempX=prop.get("midX")-(prop.get("Width")/2);
-        double tempY=prop.get("midY")-(prop.get("Length")/2);
-        if(getFillColor()!=null)
-        {
+        double tempX = prop.get("midX") - (prop.get("Width") / 2);
+        double tempY = prop.get("midY") - (prop.get("Length") / 2);
+        if (getFillColor() != null) {
             ((Graphics2D) canvas).setColor(getFillColor());
-            ((Graphics2D) canvas).fillOval((int) tempX,
-                    (int) tempY,
-                    (int) prop.get("Width").intValue(),
-                    (int) prop.get("Length").intValue());
+            ((Graphics2D) canvas).fillOval((int) tempX, (int) tempY, (int) prop.get("Width").intValue(), (int) prop.get("Length").intValue());
         }
         ((Graphics2D) canvas).setStroke(new BasicStroke(2));
         ((Graphics) canvas).setColor(getColor());
 
-        ((Graphics) canvas).drawOval((int) tempX,
-                (int) tempY,
-                (int) prop.get("Width").intValue(),
-                (int) prop.get("Length").intValue());
+        ((Graphics) canvas).drawOval((int) tempX, (int) tempY, (int) prop.get("Width").intValue(), (int) prop.get("Length").intValue());
+    }
+
+    public Ellipse2D getEllipse2D() {
+        return ellipse2D;
+    }
+
+    public void setEllipse2D(Ellipse2D ellipse2D) {
+        this.ellipse2D = ellipse2D;
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Shape cloned=new Ellipse();
+        Shape cloned = new Ellipse();
         cloned.setColor(color);
         cloned.setFillColor(fillColor);
         cloned.setPosition(point);
         Map newProp = new HashMap<>();
-        for (Map.Entry s: prop.entrySet())
+        for (Map.Entry s : prop.entrySet())
             newProp.put(s.getKey(), s.getValue());
         cloned.setProperties(newProp);
         return cloned;

@@ -91,7 +91,13 @@ public class Rectangle implements Shape {
 
     @Override
     public Point[] GetPolygonPoints() {
-        return new Point[0];
+        Point z=getPosition();
+        Point[] line = new Point[4];
+        line[0]=new Point(prop.get("x").intValue(),prop.get("y").intValue());
+        line[1]=new Point( prop.get("x").intValue(),prop.get("y").intValue()+prop.get("Width").intValue());
+        line[2]=new Point(prop.get("x").intValue()+prop.get("Length").intValue(),prop.get("y").intValue()+prop.get("Width").intValue());
+        line[3]=new Point( prop.get("x").intValue()+prop.get("Length").intValue(),prop.get("y").intValue());
+        return line;
     }
 
     @Override

@@ -47,6 +47,14 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     public int flag;
     public Color backcolflag;
 
+    public void setDrawingCol(Color c) {
+        color = c;
+    }
+
+    public void setFillCol(Color c) {
+        color1 = c;
+    }
+
     private Canvas() {
         this.setBackground(Color.WHITE);
         setVisible(true);
@@ -58,7 +66,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         addMouseMotionListener(this);
     }
 
-    public static Canvas getinstance() {
+    public static Canvas getInstance() {
         if (UniqueCanvas == null) {
             UniqueCanvas = new Canvas();
         }
@@ -72,59 +80,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         refresh(this);
     }
 
-    public void setDrawingCol(Color c) {
-        color = c;
-    }
-
-    public void setFillCol(Color c) {
-        color1 = c;
-    }
-
     @Override
-    public Shape[] getShapes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void undo() {
-        ur.undo(this);
-        repaint();
-    }
-
-    @Override
-    public void redo() {
-        ur.redo(this);
-        repaint();
-    }
-
-    @Override
-    public void refresh(Object canvas) {
-        for (int i = shapes.size() - 1; i >= 0; i--) {
-
-            shapes.get(i).draw(this.getGraphics());
-        }
-    }
-
-
-    @Override
-    public void updateShape(Shape oldShape, Shape newShape) {
-
-    }
-
-    @Override
-    public void removeShape(Shape shape) {
-        shapes.remove(shape);
-    }
-
-    @Override
-    public void addShape(Shape shape) {
-        shapes.add(shape);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
+    public void mouseClicked(MouseEvent e) {}
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -216,12 +173,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         prop = new HashMap<>();
         Command obj = new Command();
         if (flag == 1) {    //Ellipse
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
             E.setPosition(temp);
-
 
             prop.put("Width", (double) abs(start.x - end.x));
             prop.put("Length", (double) abs(end.y - start.y));
@@ -233,16 +187,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             E.setProperties(prop);
             E.draw(this.getGraphics());
 
-
             shapes.add(E);
             UN.push(E);
-
-
         } else if (flag == 2) {     //Circle
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
             Cir.setPosition(temp);
 
             double midX = (start.x + end.x) / 2;
@@ -255,18 +204,14 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             prop.put("midX", midX);
             prop.put("midY", midY);
 
-
             Cir.setProperties(prop);
             Cir.draw(this.getGraphics());
 
             UN.push(Cir);
             shapes.add(Cir);
-
         } else if (flag == 3) {     //Rectangle
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
 
             prop.put("x", temp.getX());
             prop.put("y", temp.getY());
@@ -278,12 +223,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
             UN.push(R);
             shapes.add(R);
-
         } else if (flag == 4) {     //Square
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
 
             double d = sqrt(abs((start.x - end.x) * (start.x - end.x) + (start.y - end.y) * (start.y - end.y)));
 
@@ -296,7 +238,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
             UN.push(Sq);
             shapes.add(Sq);
-
         } else if (flag == 5) {     //Triangle
             prop.put("X1", start.getX());
             prop.put("Y1", end.getY());
@@ -311,9 +252,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
             UN.push(T);
             shapes.add(T);
-
         } else if (flag == 6) {     //Line
-
             prop.put("x", (double) (start.x));
             prop.put("y", (double) (start.y));
             prop.put("x1", (double) (end.x));
@@ -340,7 +279,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
                 SelectedShape = null;
             }
         } else if (flag == 11) {    //Copy
-
             if (SelectedShape != null) {
                 obj.move(SelectedShape, end);
                 SelectedShape.draw(this.getGraphics());
@@ -349,16 +287,6 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             }
         }
         repaint();
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
     @Override
@@ -379,12 +307,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
         prop = new HashMap<>();
         Command obj = new Command();
         if (flag == 1) {
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
             E.setPosition(temp);
-
 
             prop.put("Width", (double) abs(start.x - end.x));
             prop.put("Length", (double) abs(end.y - start.y));
@@ -396,30 +321,26 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             E.setProperties(prop);
             E.draw(this.getGraphics());
 
-            try {
+           /* try {
                 CurrentShape = (Shape) E.clone();
                 shapes.add(CurrentShape);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-
+            }*/
         } else if (flag == 2) {
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
             Cir.setPosition(temp);
 
-            double midx = (start.x + end.x) / 2;
-            double midy = (start.y + end.y) / 2;
+            double midX = (start.x + end.x) / 2;
+            double midY = (start.y + end.y) / 2;
             double d = sqrt(abs((start.x - end.x) * (start.x - end.x) + (start.y - end.y) * (start.y - end.y)));
 
             prop.put("x", temp.getX());
             prop.put("y", temp.getY());
             prop.put("Radius", d);
-            prop.put("midX", midx);
-            prop.put("midY", midy);
+            prop.put("midX", midX);
+            prop.put("midY", midY);
 
 
             Cir.setProperties(prop);
@@ -433,10 +354,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             }
 
         } else if (flag == 3) {
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
 
             prop.put("x", temp.getX());
             prop.put("y", temp.getY());
@@ -446,18 +365,16 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             R.setProperties(prop);
             R.draw(this.getGraphics());
 
-            try {
+           /* try {
                 CurrentShape = (Shape) R.clone();
                 shapes.add(CurrentShape);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
 
         } else if (flag == 4) {
-            if (end.x < start.x) temp.x = end.x;
-            else temp.x = start.x;
-            if (end.y < start.y) temp.y = end.y;
-            else temp.y = start.y;
+            temp.x = Math.min(end.x, start.x);
+            temp.y = Math.min(end.y, start.y);
 
             double d = sqrt(abs((start.x - end.x) * (start.x - end.x) + (start.y - end.y) * (start.y - end.y)));
 
@@ -468,12 +385,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             Sq.setProperties(prop);
             Sq.draw(this.getGraphics());
 
-            try {
+            /*try {
                 CurrentShape = (Shape) Sq.clone();
                 shapes.add(CurrentShape);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
 
         } else if (flag == 5) {
             prop.put("X1", start.getX());
@@ -486,12 +403,13 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             T.setPosition(start);
             T.setProperties(prop);
             T.draw(this.getGraphics());
-            try {
+
+            /*try {
                 CurrentShape = (Shape) T.clone();
                 shapes.add(CurrentShape);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
 
         } else if (flag == 6) {
 
@@ -503,12 +421,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
             L.setProperties(prop);
             L.draw(this.getGraphics());
 
-            try {
+          /*  try {
                 CurrentShape = (Shape) L.clone();
                 shapes.add(CurrentShape);
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
 
         } else if (flag == 7) {
             if (SelectedShape != null) {
@@ -539,8 +457,45 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) {}
 
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
+    @Override
+    public void updateShape(Shape oldShape, Shape newShape) {
+    }
+
+    @Override
+    public void removeShape(Shape shape) {
+        shapes.remove(shape);
+    }
+
+    @Override
+    public void addShape(Shape shape) {
+        shapes.add(shape);
+    }
+
+    @Override
+    public void undo() {
+        ur.undo(this);
+        repaint();
+    }
+
+    @Override
+    public void redo() {
+        ur.redo(this);
+        repaint();
+    }
+
+    @Override
+    public void refresh(Object canvas) {
+        for (int i = shapes.size() - 1; i >= 0; i--) {
+            shapes.get(i).draw(this.getGraphics());
+        }
     }
 
     @Override
@@ -554,12 +509,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
     }
 
     @Override
-    public java.util.List<Class<? extends Shape>> getSupportedShapes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void installPluginShape(String jarPath) {
-
+    public Shape[] getShapes() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

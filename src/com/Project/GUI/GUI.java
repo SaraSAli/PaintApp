@@ -17,21 +17,19 @@ public class GUI extends JFrame {
     private Color Defdcol = Color.BLACK;
     private Color Fillcoldef;
     private Color Fillcolvar;
-    private JMenuBar bar;
-    private JMenu file, save, load;
-    /*private JMenuItem xml,jason,xfile,jfile;
-    Save s = new Save();*/
 
     public static GUI frame;
 
     public GUI() {
-        C = Canvas.getinstance();
-        C.setBackground(Color.WHITE);
-        setSize(2000, 800);
+        C = Canvas.getInstance();
+        //C.setBackground(Color.WHITE);
+        setSize(2000,770);
         setTitle("Paint with Sara!!");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+        //setLayout(null);
+
+
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -39,11 +37,11 @@ public class GUI extends JFrame {
         menuBar.add(mnMenu);
 
         JMenuItem mnNew = new JMenuItem("New");
-        mnNew.addActionListener(arg0 -> {
-            /*selectShape = "";
+      /*  mnNew.addActionListener(arg0 -> {
+            selectShape = "";
             paint.clear();
-            repaint();*/
-        });
+            repaint();
+        });*/
         mnMenu.add(mnNew);
 
         JMenuItem mnOpen = new JMenuItem("Open");
@@ -94,15 +92,15 @@ public class GUI extends JFrame {
         line.setBackground(Color.WHITE);
         line.setBounds(55, 75, 40, 40);
 
-        JButton backgroundcol = new JButton(new ImageIcon("colorChooser.png"));
-        backgroundcol.setBackground(Color.WHITE);
-        backgroundcol.setBounds(150, 30, 80, 85);
-        JButton drawingcol = new JButton(new ImageIcon("changeColor.jpg"));
-        drawingcol.setBackground(Color.WHITE);
-        drawingcol.setBounds(240, 30, 40, 40);
-        JButton fillcol = new JButton(new ImageIcon("fill.png"));
-        fillcol.setBackground(Color.WHITE);
-        fillcol.setBounds(240, 75, 40, 40);
+        JButton backGroundCol = new JButton(new ImageIcon("colorChooser.png"));
+        backGroundCol.setBackground(Color.WHITE);
+        backGroundCol.setBounds(150, 30, 80, 85);
+        JButton drawingCol = new JButton(new ImageIcon("changeColor.jpg"));
+        drawingCol.setBackground(Color.WHITE);
+        drawingCol.setBounds(240, 30, 40, 40);
+        JButton fillCol = new JButton(new ImageIcon("fill.png"));
+        fillCol.setBackground(Color.WHITE);
+        fillCol.setBounds(240, 75, 40, 40);
         JButton x = new JButton(new ImageIcon("move.png"));
         x.setBackground(Color.WHITE);
         x.setBounds(290, 30, 40, 40);
@@ -125,15 +123,16 @@ public class GUI extends JFrame {
         redo.setBackground(Color.WHITE);
         redo.setBounds(1260, 30, 70, 80);
 
+
         add(ellipse);
         add(circle);
         add(rectangle);
         add(square);
         add(triangle);
         add(line);
-        add(backgroundcol);
-        add(drawingcol);
-        add(fillcol);
+        add(backGroundCol);
+        add(drawingCol);
+        add(fillCol);
         add(x);
         add(y);
         add(z);
@@ -144,6 +143,7 @@ public class GUI extends JFrame {
 
         C.setBounds(0, 120, 1400, 700);
         add(C);
+
 
         ellipse.addActionListener(e -> C.flag = 1);
         circle.addActionListener(e -> C.flag = 2);
@@ -163,20 +163,20 @@ public class GUI extends JFrame {
         copy.addActionListener(e -> C.flag = 11);
 
 
-        backgroundcol.addActionListener(e -> {
+        backGroundCol.addActionListener(e -> {
             C.backcolflag = JColorChooser.showDialog(null, "Pick Your BackGround Color", backcolordef);
             if (C.backcolflag == null)
                 C.backcolflag = backcolordef;
             C.setBackground(C.backcolflag);
         });
-        drawingcol.addActionListener(e -> {
+        drawingCol.addActionListener(e -> {
             Drawingcoldef = JColorChooser.showDialog(null, "Pick Your Drawing Color", Defdcol);
             if (Drawingcoldef == null)
                 Drawingcoldef = Defdcol;
             C.setDrawingCol(Drawingcoldef);
 
         });
-        fillcol.addActionListener(e -> {
+        fillCol.addActionListener(e -> {
             Fillcolvar = JColorChooser.showDialog(null, "Pick Fill Color", Fillcoldef);
             if (Fillcolvar == null)
                 Fillcolvar = Fillcoldef;
