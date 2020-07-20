@@ -5,107 +5,39 @@ import java.awt.geom.Ellipse2D;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Ellipse implements Shape {
+public class Ellipse extends Shapes2D {
 
-    private Ellipse2D ellipse2D;
-
-    protected Point point;
-    protected Map<String, Double> prop;
-    protected Color color;
-    protected Color fillColor;
+    private ShapeFactory factory;
 
     public Ellipse() {
-        prop = new HashMap<>();
-        prop.put("Width", 0.0);
-        prop.put("Length", 0.0);
-        prop.put("midX", 0.0);
-        prop.put("midY", 0.0);
-        prop.put("x", 0.0);
-        prop.put("y", 0.0);
-    }
-
-    @Override
-    public void setPosition(Point position) {
-        point = position;
-    }
-
-    @Override
-    public Point getPosition() {
-        return point;
-    }
-
-    @Override
-    public void setProperties(Map<String, Double> properties) {
-        prop = properties;
-    }
-
-    @Override
-    public Map<String, Double> getProperties() {
-        return prop;
-    }
-
-    @Override
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
-    }
-
-    @Override
-    public void setFillColor(Color color) {
-        fillColor = color;
-    }
-
-    @Override
-    public Color getFillColor() {
-        return fillColor;
+        super();
+        factory = new ShapeFactory();
+        this.getProperties().put("type", 3.0);
     }
 
     @Override
     public void draw(Object canvas) {
-        double tempX = prop.get("midX") - (prop.get("Width") / 2);
-        double tempY = prop.get("midY") - (prop.get("Length") / 2);
-        if (getFillColor() != null) {
-            ((Graphics2D) canvas).setColor(getFillColor());
-            ((Graphics2D) canvas).fillOval((int) tempX, (int) tempY, (int) prop.get("Width").intValue(), (int) prop.get("Length").intValue());
+  SurroundingRectangle();
+        Graphics2D graph = (Graphics2D) canvas;
+        graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graph.setStroke(new BasicStroke((float) (double) this.getProperties().get("thickness")));
+        graph.setComposite(AlphaComposite.SrcOver.derive((float) (double) this.getProperties().get("transparent")));
+        if (this.getFillColor() == null) {
+            graph.setColor(this.getColor());
+            graph.draw(new Ellipse2D.Double(this.getPosition().getX(), this.getPosition().getY(), this.width,
+                    this.height));
         }
-        ((Graphics2D) canvas).setStroke(new BasicStroke(2));
-        ((Graphics) canvas).setColor(getColor());
-
-        ((Graphics) canvas).drawOval((int) tempX, (int) tempY, (int) prop.get("Width").intValue(), (int) prop.get("Length").intValue());
-    }
-
-    public Ellipse2D getEllipse2D() {
-        return ellipse2D;
-    }
-
-    public void setEllipse2D(Ellipse2D ellipse2D) {
-        this.ellipse2D = ellipse2D;
+        if (this.getFillColor() != null) {
+            graph.setColor(this.getFillColor());
+            graph.fill(new Ellipse2D.Double(this.getPosition().getX(), this.getPosition().getY(), this.width,
+                    this.height));
+        }
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Shape cloned = new Ellipse();
-        cloned.setColor(color);
-        cloned.setFillColor(fillColor);
-        cloned.setPosition(point);
-        Map newProp = new HashMap<>();
-        for (Map.Entry s : prop.entrySet())
-            newProp.put(s.getKey(), s.getValue());
-        cloned.setProperties(newProp);
-        return cloned;
-    }
-
-    @Override
-    public Point[] GetPolygonPoints() {
-        return new Point[0];
-    }
-
-    @Override
-    public String getName() {
-        return "Ellipse";
+        Shape newShape = factory.createShape("Ellipse");
+        newShape = this.cloning("Ellipse", this);
+        return newShape;
     }
 }

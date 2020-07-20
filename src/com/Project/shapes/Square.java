@@ -1,95 +1,39 @@
 package com.Project.shapes;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Square implements Shape {
+public class Square extends Shapes2D {
 
-    protected Point point;
-    protected Map<String, Double> prop;
-    protected Color color;
-    protected Color fillColor;
-
-    public Square(){
-        prop = new HashMap<>();
-        prop = new HashMap<>();
-        prop.put("x",0.0);
-        prop.put("y",0.0);
-        prop.put("Length", 0.0);
-    }
-
-    @Override
-    public void setPosition(Point position) {
-        point = position;
-    }
-
-    @Override
-    public Point getPosition() {
-        return point;
-    }
-
-    @Override
-    public void setProperties(Map<String, Double> properties) {
-        prop = properties;
-    }
-
-    @Override
-    public Map<String, Double> getProperties() {
-        return prop;
-    }
-
-    @Override
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
-    }
-
-    @Override
-    public void setFillColor(Color color) {
-        fillColor = color;
-    }
-
-    @Override
-    public Color getFillColor() {
-        return fillColor;
+    public Square() {
+        super();
+        this.getProperties().put("type", 5.0);
     }
 
     @Override
     public void draw(Object canvas) {
-        if (getFillColor() != null) {
-            ((Graphics2D) canvas).setColor(getFillColor());
-            ((Graphics2D) canvas).fillRect(prop.get("x").intValue(), prop.get("y").intValue(), prop.get("Length").intValue(), prop.get("Length").intValue());
+        SurroundingRectangle();
+        Graphics2D graph = (Graphics2D) canvas;
+        graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graph.setStroke(new BasicStroke((float) (double) this.getProperties().get("thickness")));
+        graph.setComposite(AlphaComposite.SrcOver.derive((float) (double) this.getProperties().get("transparent")));
+        graph.setColor(this.getColor());
+        graph.draw(
+                new Rectangle2D.Double(this.getPosition().getX(), this.getPosition().getY(), this.width, this.width));
+
+        if (this.getFillColor() != null) {
+            graph.setColor(this.getFillColor());
+            graph.fill(new Rectangle2D.Double(this.getPosition().getX(), this.getPosition().getY(), this.width,
+                    this.width));
+
         }
-        ((Graphics2D) canvas).setStroke(new BasicStroke(2));
-        ((Graphics2D) canvas).setColor(getColor());
-        ((Graphics2D) canvas).drawRect(prop.get("x").intValue(), prop.get("y").intValue(), prop.get("Length").intValue(), prop.get("Length").intValue());
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Shape cloned=new Square();
-        cloned.setColor(color);
-        cloned.setFillColor(fillColor);
-        cloned.setPosition(point);
-        Map newProp = new HashMap<>();
-        for (Map.Entry s : prop.entrySet())
-            newProp.put(s.getKey(), s.getValue());
-        cloned.setProperties(newProp);
-        return cloned;
-    }
-
-    @Override
-    public Point[] GetPolygonPoints() {
-        return new Point[0];
-    }
-
-    @Override
-    public String getName() {
-        return "Square";
+        Shape newShape = this.cloning("Square", this);
+        return newShape;
     }
 }
