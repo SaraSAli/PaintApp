@@ -69,7 +69,7 @@ public class Board extends JPanel {
         this.setBackground(Color.WHITE);
 
         this.addMouseListener(new MouseAdapter() {
-            // start
+
             public void mouseClicked(MouseEvent e) {
 
                 Collections.reverse(paintDemo.shapes);
@@ -91,7 +91,6 @@ public class Board extends JPanel {
                             parentFrame.getCopyButton().setEnabled(true);
                             parentFrame.getRemoveButton().setEnabled(true);
                         } catch (CloneNotSupportedException e1) {
-                            // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
 
@@ -149,7 +148,6 @@ public class Board extends JPanel {
                     shape.getProperties().put("transparent", transparent);
                     repaint();
                 } else if (currentShape != null) {
-                    // Boolean flag = false;
 
                     double x1 = currentShape.getPosition().getX();
                     double y1 = currentShape.getPosition().getY();
@@ -177,11 +175,8 @@ public class Board extends JPanel {
                     drawEnd = null;
                     repaint();
                     currentAction = 0;
-                } else if (currentShape != null && currentShapeDragged == true) {
-                    /*
-                     * System.out.println(currentShape.getPosition());
-                     * System.out.println(updatedShape.getPosition());
-                     */
+                } else if (currentShape != null && currentShapeDragged) {
+
                     paintDemo.updateShape(updatedShape, currentShape);
 
                     currentShape = null;
@@ -259,8 +254,6 @@ public class Board extends JPanel {
                             positionXleft = currentShape.getPosition().getX();
                         }
                         if (type == 2 || type == 3 || type == 4 || type == 5) {
-                            // currentShape.setPosition(new
-                            // Point((int)e.getX(),(int)currentShape.getPosition().getY()));
                             currentShape.getPosition().x = e.getX();
                             currentShape.getProperties().put("width", oldWidthLeft + (positionXleft - e.getX()));
                             if (type == 4 || type == 5) {

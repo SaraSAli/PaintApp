@@ -1,7 +1,6 @@
 package eg.edu.alexu.csd.oop.draw.GUI;
 
 import eg.edu.alexu.csd.oop.draw.Controller.PaintEngine;
-import eg.edu.alexu.csd.oop.draw.Controller.SaveLoad;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 import javax.swing.filechooser.FileFilter;
@@ -18,7 +17,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -43,7 +41,6 @@ public class PaintApp extends JFrame {
     private boolean fillShape;
     private JButton SaveButton;
     private boolean isFound;
-    private SaveLoad saveLoad;
 
     public PaintApp() {
         PaintDemo = new PaintEngine();
@@ -137,18 +134,6 @@ public class PaintApp extends JFrame {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-              /*  try {
-                    String filePath = fc.getSelectedFile().getCanonicalPath();
-                    if (filePath.matches(".*\\.[Jj][Ss][Oo][Nn]")){
-                        StringBuilder name = new StringBuilder();
-                        name.append("/");
-                        name.append(JOptionPane.showInputDialog("Name of the .json file without extension"));
-                        name.append(".json");
-                        //saveLoad.saveJson(new PaintEngine() ,fc.getSelectedFile()+name.toString());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
             }
         });
         SaveButton.setIcon(new ImageIcon("save.png"));
@@ -478,7 +463,7 @@ public class PaintApp extends JFrame {
         panel_4.add(NoFill);
         panel_4.add(Fill);
 
-        fillColor = Color.BLUE;
+        fillColor = Color.RED;
         strokeColor = Color.BLACK;
 
         JPanel strokePanel = new JPanel();
